@@ -208,4 +208,4 @@ mvn clean package
 
 ## License
 
-当前仓库还没有附带开源许可证。如果你准备公开开源，建议补充合适的 License 文件。
+本项目基于 MIT License 开源，具体内容请参见 `LICENSE` 文件。

@@ -208,4 +208,4 @@ This repository already contains the foundation for:
 
 ## License
 
-No license file is included yet. Add one before publishing the project as open source.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
