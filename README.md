@@ -17,6 +17,12 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/KasuganoAyaka/anime-blog/actions/workflows/ci.yml">
+    <img alt="Build Status" src="https://github.com/KasuganoAyaka/anime-blog/actions/workflows/ci.yml/badge.svg?branch=main" />
+  </a>
+</p>
+
+<p align="center">
   <a href="https://vuejs.org/"><img alt="Vue 3" src="https://img.shields.io/badge/Vue_3-69C9D0?style=for-the-badge&logo=vuedotjs&logoColor=white" /></a>
   <a href="https://spring.io/projects/spring-boot"><img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-FF8FA3?style=for-the-badge&logo=springboot&logoColor=white" /></a>
   <a href="https://www.mysql.com/"><img alt="MySQL 8" src="https://img.shields.io/badge/MySQL_8-7AA8FF?style=for-the-badge&logo=mysql&logoColor=white" /></a>
