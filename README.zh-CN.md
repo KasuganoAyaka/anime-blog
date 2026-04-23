@@ -1,29 +1,119 @@
-# Anime Blog
+<h1 align="center">
+  <img src="./frontend/public/logo.png" alt="Ayaka Blog logo" width="44" />
+  Ayaka Blog
+</h1>
 
-[English](./README.md)
+<p align="center">
+  <img src="./docs/assets/readme-banner.png" alt="Ayaka Blog banner" width="100%" />
+</p>
 
-Anime Blog 是一个面向动漫风个人站点场景的全栈博客项目，包含 Vue 3 前端、Spring Boot 后端，以及 MySQL 数据库脚本与迁移文件。项目将内容发布、社区互动和站点管理整合在同一个仓库中，适合作为个人博客、练手项目或继续扩展的全栈基础工程。
+<p align="center">
+  <strong>一个带有二次元Miku气质的全栈博客平台，包含柔和渐变、圆角卡片、热门标签、音乐模块、聊天和内容发布流程。</strong>
+</p>
 
-## 项目亮点
+<p align="center">
+  <a href="./README.md">English</a> |
+  <a href="https://blog.ayakacloud.cn/">在线主页</a> |
+  <a href="./LICENSE">MIT License</a>
+</p>
 
-- 提供首页、文章详情、标签页、分类页、关于页和搜索索引
-- 支持 Markdown 文章编辑与文章配图上传
-- 支持注册、邮箱验证码、登录、刷新令牌、忘记密码、会话管理
-- 提供站长、管理员、普通用户三类角色权限控制
-- 支持普通用户投稿与管理员审核流程
-- 支持评论发布、评论审核、评论举报与游客/匿名评论保护
-- 内置音乐模块，支持音乐列表管理与媒体文件上传
-- 内置实时聊天，支持 WebSocket、好友申请、拉黑、消息搜索
-- 提供联系表单、友链申请和后台回复处理
-- 前端支持 `zh-CN`、`zh-TW`、`en` 多语言
-- 可选接入 Cloudflare Turnstile 与 IP 归属地解析
+<p align="center">
+  <img alt="Vue 3" src="https://img.shields.io/badge/Vue_3-69C9D0?style=for-the-badge&logo=vuedotjs&logoColor=white" />
+  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-FF8FA3?style=for-the-badge&logo=springboot&logoColor=white" />
+  <img alt="MySQL 8" src="https://img.shields.io/badge/MySQL_8-7AA8FF?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img alt="WebSocket" src="https://img.shields.io/badge/WebSocket-5EC6C5?style=for-the-badge&logo=socketdotio&logoColor=white" />
+  <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-F6A6B2?style=for-the-badge" />
+</p>
+
+<p align="center">
+  首页 • 文章 • 热门标签 • 友情链接 • 音乐播放器 • 实时聊天
+</p>
+
+
+## 站点简介
+
+> Ayaka Blog 将 Vue 3 前端、Spring Boot 后端和 MySQL 数据库脚本整合在一个仓库中。它不是一个单纯的文章站模板，而是一套更像“个人小站中枢”的全栈基础：发文、审核、评论、音乐、友链、聊天和多语言支持，都已经有了比较完整的骨架。
+
+## 站点分区
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>首页氛围</strong><br />
+      首页文章流、文章详情、标签页、分类页、关于页、搜索索引、友情链接
+    </td>
+    <td width="50%" valign="top">
+      <strong>创作空间</strong><br />
+      Markdown 编辑器、文章图片上传、投稿工作台、审核后发布
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>账号角落</strong><br />
+      注册、邮箱验证、登录、刷新令牌、找回密码、会话管理
+    </td>
+    <td width="50%" valign="top">
+      <strong>审核后台</strong><br />
+      角色权限控制、文章审核、评论审核、评论举报、驳回、删除、批量处理
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>社交区域</strong><br />
+      实时聊天、好友申请、拉黑、已读状态同步、联系人搜索
+    </td>
+    <td width="50%" valign="top">
+      <strong>扩展模块</strong><br />
+      音乐播放列表、媒体上传、可选 Turnstile、人机验证、IP 归属地解析
+    </td>
+  </tr>
+</table>
+
+## 风格方向
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>主强调色</strong><br />
+      以站点里的青绿色 <code>#39c5bb</code> 为主视觉点缀
+    </td>
+    <td width="50%" valign="top">
+      <strong>次级渐变</strong><br />
+      柔和蓝紫渐变，对应卡片和按钮高光
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>界面语言</strong><br />
+      大圆角、轻玻璃态、留白充足、信息层次柔和
+    </td>
+    <td width="50%" valign="top">
+      <strong>产品气质</strong><br />
+      个人感、安静、轻二次元、适合长期扩展
+    </td>
+  </tr>
+</table>
 
 ## 技术栈
 
-- 前端：Vue 3、Vite 5、Vue Router、Pinia、Vue I18n、Element Plus、md-editor-v3
-- 后端：Spring Boot 3.5、Spring Security、MyBatis-Plus、JWT、WebSocket、Java Mail
-- 数据库：MySQL 8、初始化 SQL、种子数据、手动迁移脚本
-- 构建工具：npm、Maven
+<table>
+  <tr>
+    <td width="20%" valign="top"><strong>前端</strong></td>
+    <td width="80%" valign="top">Vue 3、Vite 5、Vue Router、Pinia、Vue I18n、Element Plus、md-editor-v3</td>
+  </tr>
+  <tr>
+    <td width="20%" valign="top"><strong>后端</strong></td>
+    <td width="80%" valign="top">Spring Boot 3.5、Spring Security、MyBatis-Plus、JWT、WebSocket、Java Mail</td>
+  </tr>
+  <tr>
+    <td width="20%" valign="top"><strong>数据库</strong></td>
+    <td width="80%" valign="top">MySQL 8、初始化 SQL、种子数据、手动 SQL 迁移</td>
+  </tr>
+  <tr>
+    <td width="20%" valign="top"><strong>构建工具</strong></td>
+    <td width="80%" valign="top">npm、Maven</td>
+  </tr>
+</table>
 
 ## 目录结构
 
@@ -35,38 +125,7 @@ anime-blog/
 └─ .gitignore
 ```
 
-## 核心功能
-
-### 前台站点
-
-- 文章列表、文章详情、分类与标签浏览
-- 前端搜索索引接口
-- 音乐播放器与友情链接展示
-- 联系我表单与友链申请表单
-
-### 账号与安全
-
-- 用户名或邮箱登录
-- 邮箱验证码注册与找回密码
-- Access Token + Refresh Token 鉴权流程
-- 会话列表与远程下线
-- 可选 Turnstile 人机验证，支持登录、注册发码、游客评论场景
-
-### 内容与审核
-
-- 后台文章管理
-- 普通用户投稿工作台与审核发布流程
-- 评论审核、驳回、删除与批量处理
-- 评论举报查看与处理
-
-### 社交能力
-
-- 私聊与全局聊天
-- 好友申请与好友管理
-- 用户拉黑、消息已读状态同步
-- 消息搜索与联系人搜索
-
-## 快速开始
+## 启动这个小站
 
 ### 1. 环境要求
 
@@ -118,10 +177,10 @@ cp .env.template .env
 
 说明：
 
-- 仓库里的 `start.sh` 会自动加载 `.env`。
+- `backend/start.sh` 会自动加载 `.env`。
 - 如果你通过 IDE 或 `mvn spring-boot:run` 启动后端，需要先把这些环境变量注入到当前运行进程。
 
-### 4. 启动后端
+### 4. 启动后端服务
 
 本地开发：
 
@@ -143,7 +202,7 @@ cd backend
 ./start.sh start
 ```
 
-### 5. 启动前端
+### 5. 启动前端站点
 
 ```bash
 cd frontend
@@ -179,33 +238,52 @@ cd backend
 mvn clean package
 ```
 
-## 配置说明
+## 站点说明
 
-- 后端默认连接的数据库名为 `anime_blog`
-- 上传文件默认存储在 `APP_UPLOAD_DIR`，默认值为 `./storage/uploads`
-- `frontend/dist`、`backend/target` 等构建产物已经在 `.gitignore` 中排除
-- `backend/storage` 被视为运行期数据目录，不会提交到仓库
-- 本地开发时默认允许 `http://localhost:5173` 访问后端接口
+> 后端默认连接的数据库名为 `anime_blog`。  
+> 上传文件默认存储在 `APP_UPLOAD_DIR`，默认值为 `./storage/uploads`。  
+> `frontend/dist`、`backend/target` 等构建产物已经在 `.gitignore` 中排除。  
+> `backend/storage` 被视为运行期数据目录，不会提交到仓库。  
+> 本地开发时默认允许 `http://localhost:5173` 访问后端接口。
 
 ## 常用文件
 
-- `frontend/package.json`：前端脚本命令
-- `frontend/vite.config.js`：开发端口与代理配置
-- `backend/.env.template`：环境变量模板
-- `backend/start.sh`：后端打包部署脚本
-- `database/init.sql`：数据库初始化结构
-- `database/init_data.sql`：数据库种子数据
+<table>
+  <tr>
+    <td width="34%" valign="top"><code>frontend/package.json</code></td>
+    <td width="66%" valign="top">前端脚本命令</td>
+  </tr>
+  <tr>
+    <td width="34%" valign="top"><code>frontend/vite.config.js</code></td>
+    <td width="66%" valign="top">开发端口与代理配置</td>
+  </tr>
+  <tr>
+    <td width="34%" valign="top"><code>backend/.env.template</code></td>
+    <td width="66%" valign="top">环境变量模板</td>
+  </tr>
+  <tr>
+    <td width="34%" valign="top"><code>backend/start.sh</code></td>
+    <td width="66%" valign="top">后端打包部署辅助脚本</td>
+  </tr>
+  <tr>
+    <td width="34%" valign="top"><code>database/init.sql</code></td>
+    <td width="66%" valign="top">数据库初始化结构</td>
+  </tr>
+  <tr>
+    <td width="34%" valign="top"><code>database/init_data.sql</code></td>
+    <td width="66%" valign="top">数据库种子数据</td>
+  </tr>
+</table>
 
-## 后续可扩展方向
+## 后续扩展方向
 
-这个项目已经具备继续扩展的基础，可以继续往这些方向演进：
-
-- 更完整的内容审核工作流
-- 更丰富的模块页与站点页面
-- 更强的聊天与社交功能
-- 更完善的生产环境部署方案
-- 自动化数据库迁移管理
+> 这个项目已经具备继续演进的基础，可以继续往这些方向推进。  
+> 更完整的内容审核工作流。  
+> 更丰富的站点模块和个人页面。  
+> 更强的聊天、通知与社交能力。  
+> 更完善的生产环境部署方案。  
+> 自动化数据库迁移管理。
 
 ## License
 
-本项目基于 MIT License 开源，具体内容请参见 `LICENSE` 文件。
+本项目基于 MIT License 开源，具体内容请参见 [LICENSE](./LICENSE) 文件。
