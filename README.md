@@ -12,17 +12,17 @@
 </p>
 
 <p align="center">
-  <a href="./README.zh-CN.md">简体中文</a> |
-  <a href="https://blog.ayakacloud.cn/">Live Site</a> |
-  <a href="./LICENSE">MIT License</a>
+  <a href="./README.zh-CN.md"><img alt="简体中文" src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-EAF7F6?style=for-the-badge&logo=googletranslate&logoColor=39C5BB&labelColor=EAF7F6&color=39C5BB" /></a>
+  <a href="https://blog.ayakacloud.cn/"><img alt="Live Site" src="https://img.shields.io/badge/Live_Site-EEF2FF?style=for-the-badge&logo=vercel&logoColor=667EEA&labelColor=EEF2FF&color=667EEA" /></a>
 </p>
 
 <p align="center">
-  <img alt="Vue 3" src="https://img.shields.io/badge/Vue_3-69C9D0?style=for-the-badge&logo=vuedotjs&logoColor=white" />
-  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-FF8FA3?style=for-the-badge&logo=springboot&logoColor=white" />
-  <img alt="MySQL 8" src="https://img.shields.io/badge/MySQL_8-7AA8FF?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img alt="WebSocket" src="https://img.shields.io/badge/WebSocket-5EC6C5?style=for-the-badge&logo=socketdotio&logoColor=white" />
-  <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-F6A6B2?style=for-the-badge" />
+  <a href="https://vuejs.org/"><img alt="Vue 3" src="https://img.shields.io/badge/Vue_3-69C9D0?style=for-the-badge&logo=vuedotjs&logoColor=white" /></a>
+  <a href="https://spring.io/projects/spring-boot"><img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-FF8FA3?style=for-the-badge&logo=springboot&logoColor=white" /></a>
+  <a href="https://www.mysql.com/"><img alt="MySQL 8" src="https://img.shields.io/badge/MySQL_8-7AA8FF?style=for-the-badge&logo=mysql&logoColor=white" /></a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"><img alt="WebSocket" src="https://img.shields.io/badge/WebSocket-5EC6C5?style=for-the-badge&logo=socketdotio&logoColor=white" /></a>
+  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/LICENSE-4B4B4B?style=for-the-badge" /></a>
+  <a href="./LICENSE"><img alt="MIT" src="https://img.shields.io/badge/MIT-F6A6B2?style=for-the-badge" /></a>
 </p>
 
 <p align="center">
