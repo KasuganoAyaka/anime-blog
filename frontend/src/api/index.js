@@ -17,6 +17,24 @@ const api = axios.create({
 
 let refreshPromise = null
 
+const createNoCacheRequestConfig = (config = {}) => {
+  const params = { ...(config.params || {}), _ts: Date.now() }
+  const headers = {
+    ...(config.headers || {}),
+    'Cache-Control': 'no-cache, no-store, max-age=0',
+    Pragma: 'no-cache',
+    Expires: '0'
+  }
+
+  return {
+    ...config,
+    params,
+    headers
+  }
+}
+
+const publicGet = (url, config = {}) => api.get(url, createNoCacheRequestConfig(config))
+
 const createApiError = (message, payload = {}, status = 200) => {
   const error = new Error(message || 'Request failed')
   error.name = 'ApiError'
@@ -208,12 +226,12 @@ export const authApi = {
 }
 
 export const contentApi = {
-  getPosts: (params) => api.get('/posts', { params }),
-  getPostTags: () => api.get('/posts/tags'),
-  getPostCategories: () => api.get('/posts/categories'),
-  getPostSearchIndex: () => api.get('/posts/search-index'),
-  getPost: (id) => api.get(`/posts/${id}`),
-  getPostComments: (id) => api.get(`/posts/${id}/comments`),
+  getPosts: (params) => publicGet('/posts', { params }),
+  getPostTags: () => publicGet('/posts/tags'),
+  getPostCategories: () => publicGet('/posts/categories'),
+  getPostSearchIndex: () => publicGet('/posts/search-index'),
+  getPost: (id) => publicGet(`/posts/${id}`),
+  getPostComments: (id) => publicGet(`/posts/${id}/comments`),
   createPostComment: (id, data) => api.post(`/posts/${id}/comments`, data),
   createCommentReport: (postId, commentId, data) => api.post(`/posts/${postId}/comments/${commentId}/reports`, data),
   uploadCommentImages: (formData) =>
@@ -221,11 +239,11 @@ export const contentApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
       timeout: 120000
     }),
-  getMusicList: () => api.get('/public/music/list'),
-  getNextMusic: (id) => api.get(`/public/music/next/${id}`),
-  getPrevMusic: (id) => api.get(`/public/music/prev/${id}`),
-  getStats: () => api.get('/public/stats'),
-  getFriendLinks: () => api.get('/public/friend-links'),
+  getMusicList: () => publicGet('/public/music/list'),
+  getNextMusic: (id) => publicGet(`/public/music/next/${id}`),
+  getPrevMusic: (id) => publicGet(`/public/music/prev/${id}`),
+  getStats: () => publicGet('/public/stats'),
+  getFriendLinks: () => publicGet('/public/friend-links'),
   submitContact: (data) => api.post('/public/contact', data),
   submitFriendLink: (data) => api.post('/public/friend-links/apply', data)
 }

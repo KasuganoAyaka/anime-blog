@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -20,16 +20,12 @@ import java.util.regex.Pattern;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class PublicApiCacheControlFilter extends OncePerRequestFilter {
 
-    private static final Set<String> EXACT_PATHS = Set.of(
-            "/api/posts",
-            "/api/posts/tags",
-            "/api/posts/categories",
-            "/api/posts/search-index",
-            "/api/public/stats"
+    private static final List<Pattern> NO_STORE_PATH_PATTERNS = List.of(
+            Pattern.compile("^/api/posts(?:/.*)?$"),
+            Pattern.compile("^/api/public(?:/.*)?$"),
+            Pattern.compile("^/api/friend-links/?$"),
+            Pattern.compile("^/api/music/?$")
     );
-
-    private static final Pattern POST_DETAIL_PATH = Pattern.compile("^/api/posts/\\d+$");
-    private static final Pattern POST_COMMENTS_PATH = Pattern.compile("^/api/posts/\\d+/comments$");
 
     @Override
     protected void doFilterInternal(
@@ -37,25 +33,40 @@ public class PublicApiCacheControlFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        if ("GET".equalsIgnoreCase(request.getMethod()) && shouldDisableCache(request)) {
+        boolean disableCache = "GET".equalsIgnoreCase(request.getMethod()) && shouldDisableCache(request);
+        if (disableCache) {
             applyNoStoreHeaders(response);
         }
 
         filterChain.doFilter(request, response);
+
+        if (disableCache) {
+            applyNoStoreHeaders(response);
+        }
     }
 
     private boolean shouldDisableCache(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = normalizePath(request.getRequestURI());
         if (path == null || path.isBlank()) {
             return false;
         }
 
-        if (EXACT_PATHS.contains(path)) {
-            return true;
+        for (Pattern pattern : NO_STORE_PATH_PATTERNS) {
+            if (pattern.matcher(path).matches()) {
+                return true;
+            }
         }
+        return false;
+    }
 
-        return POST_DETAIL_PATH.matcher(path).matches()
-                || POST_COMMENTS_PATH.matcher(path).matches();
+    private String normalizePath(String path) {
+        if (path == null) {
+            return null;
+        }
+        if (path.length() > 1 && path.endsWith("/")) {
+            return path.substring(0, path.length() - 1);
+        }
+        return path;
     }
 
     private void applyNoStoreHeaders(HttpServletResponse response) {
@@ -64,5 +75,6 @@ public class PublicApiCacheControlFilter extends OncePerRequestFilter {
         response.setDateHeader("Expires", 0);
         response.setHeader("Surrogate-Control", "no-store");
         response.setHeader("CDN-Cache-Control", "no-store");
+        response.setHeader("Cloudflare-CDN-Cache-Control", "no-store");
     }
 }
