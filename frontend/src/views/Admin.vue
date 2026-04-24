@@ -102,7 +102,12 @@
             </div>
             <el-button type="primary" @click="openPostDialog()">{{ isAdmin ? '➕ 新增文章' : '📝 提交文章' }}</el-button>
           </div>
-          <div v-if="posts.length === 0" class="post-empty-card">
+          <div v-if="postListLoading" class="module-loading-card">
+            <div class="module-loading-spinner"></div>
+            <div class="module-loading-title">正在加载文章列表...</div>
+            <div class="module-loading-desc">刚保存的文章会在列表刷新完成后显示。</div>
+          </div>
+          <div v-else-if="posts.length === 0" class="post-empty-card">
             <div class="post-empty-title">{{ isAdmin ? '暂无文章' : '暂无投稿记录' }}</div>
             <div class="post-empty-desc">新布局已经准备好，创建一篇文章后这里会以卡片流形式展示。</div>
           </div>
@@ -219,7 +224,11 @@
               <span v-if="moderationTask.failureCount">失败 {{ moderationTask.failureCount }}</span>
             </div>
           </div>
-          <Transition name="review-switch" mode="out-in">
+          <div v-if="reviewListLoading" class="module-loading-card table-loading-card">
+            <div class="module-loading-spinner"></div>
+            <div class="module-loading-title">正在加载审核列表...</div>
+          </div>
+          <Transition v-else name="review-switch" mode="out-in">
             <div :key="activeReviewList" class="table-container review-table-stage">
               <table class="data-table">
                 <thead>
@@ -1329,9 +1338,13 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 const themeStore = useThemeStore()
+const resolveInitialActiveMenu = () => {
+  const menu = typeof route.query.menu === 'string' ? route.query.menu.trim() : ''
+  return menu || 'dashboard'
+}
 
 const menuReady = ref(false)
-const activeMenu = ref('dashboard')
+const activeMenu = ref(resolveInitialActiveMenu())
 const saving = ref(false)
 const showPostDialog = ref(false)
 const showMusicDialog = ref(false)
@@ -1601,6 +1614,7 @@ watch(() => musicForm.value.coverUrl, () => {
 })
 
 const {
+  dataLoading,
   fetchOverviewData,
   fetchArticleData,
   fetchCommentData,
@@ -1627,6 +1641,9 @@ const {
   getCommentParams: () => getCommentQueryParams(),
   getReportParams: () => getReportQueryParams()
 })
+
+const postListLoading = computed(() => dataLoading.posts)
+const reviewListLoading = computed(() => dataLoading.reviews)
 
 const navItems = computed(() => (
   isAdmin.value
@@ -3379,6 +3396,50 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
   gap: 18px;
+}
+
+.module-loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 240px;
+  padding: 36px 24px;
+  border-radius: 24px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 26%, var(--border-color));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-light) 68%, var(--bg-card)), var(--bg-card));
+  text-align: center;
+}
+
+.table-loading-card {
+  min-height: 320px;
+}
+
+.module-loading-spinner {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.module-loading-title {
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.module-loading-desc {
+  color: var(--text-secondary);
+  line-height: 1.75;
 }
 
 .post-empty-card {

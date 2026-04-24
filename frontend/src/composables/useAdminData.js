@@ -1,3 +1,4 @@
+import { reactive } from 'vue'
 import { adminApi } from '@/api'
 
 const normalizePageData = (payload, fallbackSize = 10) => {
@@ -87,7 +88,8 @@ export const useAdminData = ({
 }) => {
   const requestState = {
     overview: 0,
-    article: 0,
+    posts: 0,
+    reviews: 0,
     users: 0,
     links: 0,
     contacts: 0,
@@ -95,6 +97,18 @@ export const useAdminData = ({
     reports: 0,
     music: 0
   }
+
+  const dataLoading = reactive({
+    overview: false,
+    posts: false,
+    reviews: false,
+    users: false,
+    links: false,
+    contacts: false,
+    comments: false,
+    reports: false,
+    music: false
+  })
 
   const beginRequest = (key) => {
     requestState[key] += 1
@@ -138,8 +152,9 @@ export const useAdminData = ({
     }
   }
 
-  const fetchArticleData = async () => {
-    const requestId = beginRequest('article')
+  const fetchPostsData = async () => {
+    const requestId = beginRequest('posts')
+    dataLoading.posts = true
     try {
       if (isAdmin.value) {
         const postParams = {
@@ -147,31 +162,15 @@ export const useAdminData = ({
           size: listMeta.posts.size,
           ...(getPostParams() || {})
         }
-        const reviewParams = {
-          page: listMeta.reviews.page,
-          size: listMeta.reviews.size,
-          ...(getReviewParams() || {})
-        }
-        const [postRes, reviewRes] = await Promise.all([
-          adminApi.getPosts(postParams),
-          adminApi.getPostReviews(reviewParams)
-        ])
-        if (!isLatestRequest('article', requestId)) {
+        const postRes = await adminApi.getPosts(postParams)
+        if (!isLatestRequest('posts', requestId)) {
           return
         }
 
         const postPage = applyPageData(posts, listMeta.posts, postRes.data, 10)
-        const reviewPage = applyPageData(postReviews, listMeta.reviews, reviewRes.data, 10)
-        if (!reviewPage.summaryProvided && reviewPage.records.length > 0) {
-          listMeta.reviews.summary = mergeSummary(
-            listMeta.reviews.summary,
-            deriveSummaryByKey(reviewPage.records, 'reviewStatus', ['pending', 'approved', 'rejected'], reviewPage.total)
-          )
-        }
         stats.value = {
           ...stats.value,
-          posts: postPage.total,
-          pendingReviews: Number((listMeta.reviews.summary || {}).pending || 0)
+          posts: postPage.total
         }
         return
       }
@@ -181,7 +180,7 @@ export const useAdminData = ({
         size: listMeta.posts.size
       }
       const workspace = await adminApi.getPostWorkspace(workspaceParams)
-      if (!isLatestRequest('article', requestId)) {
+      if (!isLatestRequest('posts', requestId)) {
         return
       }
       const workspacePage = applyPageData(posts, listMeta.posts, workspace.data, 10)
@@ -196,7 +195,68 @@ export const useAdminData = ({
       }
     } catch (error) {
       console.error(error)
+    } finally {
+      if (isLatestRequest('posts', requestId)) {
+        dataLoading.posts = false
+      }
     }
+  }
+
+  const fetchReviewsData = async () => {
+    if (!isAdmin.value) {
+      postReviews.value = []
+      resetPageMeta(listMeta.reviews, 10)
+      return
+    }
+
+    const requestId = beginRequest('reviews')
+    dataLoading.reviews = true
+    try {
+      const reviewParams = {
+        page: listMeta.reviews.page,
+        size: listMeta.reviews.size,
+        ...(getReviewParams() || {})
+      }
+      const reviewRes = await adminApi.getPostReviews(reviewParams)
+      if (!isLatestRequest('reviews', requestId)) {
+        return
+      }
+
+      const reviewPage = applyPageData(postReviews, listMeta.reviews, reviewRes.data, 10)
+      if (!reviewPage.summaryProvided && reviewPage.records.length > 0) {
+        listMeta.reviews.summary = mergeSummary(
+          listMeta.reviews.summary,
+          deriveSummaryByKey(reviewPage.records, 'reviewStatus', ['pending', 'approved', 'rejected'], reviewPage.total)
+        )
+      }
+      stats.value = {
+        ...stats.value,
+        pendingReviews: Number((listMeta.reviews.summary || {}).pending || 0)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      if (isLatestRequest('reviews', requestId)) {
+        dataLoading.reviews = false
+      }
+    }
+  }
+
+  const fetchArticleData = async (menuKey = 'posts') => {
+    if (menuKey === 'reviews') {
+      await fetchReviewsData()
+      return
+    }
+
+    if (menuKey === 'all') {
+      await Promise.all([
+        fetchPostsData(),
+        isAdmin.value ? fetchReviewsData() : Promise.resolve()
+      ])
+      return
+    }
+
+    await fetchPostsData()
   }
 
   const fetchUsersData = async () => {
@@ -392,6 +452,7 @@ export const useAdminData = ({
   }
 
   return {
+    dataLoading,
     fetchOverviewData,
     fetchArticleData,
     fetchCommentData,

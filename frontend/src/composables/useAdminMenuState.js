@@ -50,12 +50,17 @@ export const useAdminMenuState = ({
       return
     }
 
-    if (menuKey === 'posts' || menuKey === 'reviews') {
+    if (menuKey === 'posts') {
       await Promise.all([
-        fetchArticleData(),
+        fetchArticleData('posts'),
         ensurePostMenuDependencies()
       ])
       loadedMenus.posts = true
+      return
+    }
+
+    if (menuKey === 'reviews') {
+      await fetchArticleData('reviews')
       loadedMenus.reviews = true
       return
     }
@@ -162,7 +167,7 @@ export const useAdminMenuState = ({
 
   watch(() => route.query.menu, () => {
     syncMenuFromRoute()
-  })
+  }, { immediate: true })
 
   watch(activeReviewList, async () => {
     if (activeMenu.value !== 'reviews') return
