@@ -13,7 +13,7 @@
     "dompurify": "^3.4.1",
     "element-plus": "^2.13.7",
     "fuse.js": "^7.3.0",
-    "marked": "^17.0.5",
+    "marked": "^17.0.6",
     "md-editor-v3": "^6.4.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.0",
