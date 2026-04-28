@@ -37,7 +37,7 @@ Thumbs.db
 .env
 .env.local
 .env.production
-**/application-local.yml
+application.yml
 **/application-local.properties
 
 Microsoft/Windows/PowerShell/ModuleAnalysisCache/
