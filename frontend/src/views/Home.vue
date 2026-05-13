@@ -282,6 +282,7 @@ const dateLocale = computed(() => (locale.value === 'en' ? 'en-US' : locale.valu
 const linksStorageKey = 'admin_links_updated'
 let sidebarMotionFrame = 0
 let sidebarMotionStart = 0
+let cachedFriendLinksPanelHeight = 0
 
 const getTags = (tags) => parseTagList(tags, { limit: 3 })
 
@@ -372,8 +373,16 @@ const syncSidebarMotionState = () => {
   const triggerPageTop = triggerRectTop + window.scrollY
   sidebarMotionStart = Math.max(0, Math.round(triggerPageTop - stickyTop))
 
-  const shouldFloat = window.scrollY >= sidebarMotionStart
-  const friendLinksPanelHeight = friendLinksPanelRef.value?.offsetHeight || 0
+  const floatingEnterPoint = sidebarMotionStart + 8
+  const floatingExitPoint = Math.max(0, sidebarMotionStart - 24)
+  const shouldFloat = sidebarFloating.value
+    ? window.scrollY >= floatingExitPoint
+    : window.scrollY >= floatingEnterPoint
+  const measuredFriendLinksPanelHeight = friendLinksPanelRef.value?.offsetHeight || 0
+  if (measuredFriendLinksPanelHeight > 0) {
+    cachedFriendLinksPanelHeight = measuredFriendLinksPanelHeight
+  }
+  const friendLinksPanelHeight = cachedFriendLinksPanelHeight
   const maxScrollableDistance = Math.max(
     0,
     (document.documentElement?.scrollHeight || 0) - window.innerHeight
