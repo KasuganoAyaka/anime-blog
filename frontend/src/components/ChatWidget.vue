@@ -348,6 +348,8 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+import 'element-plus/theme-chalk/el-message-box.css'
 import { chatApi, ensureValidAccessToken } from '@/api'
 import { useUserStore } from '@/stores'
 import { getRequestErrorMessage } from '@/utils/request'

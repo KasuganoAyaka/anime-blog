@@ -93,6 +93,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 import { adminApi } from '@/api'
 import MarkdownEditor from '@/components/MarkdownEditor.vue'
 import { POST_CATEGORIES, createEmptyPostForm } from '@/constants/postEditor'

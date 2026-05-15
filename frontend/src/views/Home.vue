@@ -457,11 +457,16 @@ onMounted(async () => {
   window.addEventListener('storage', handleLinksStorage)
   window.addEventListener('links-updated', handleLinksUpdated)
 
-  await Promise.all([
-    fetchPosts({ reset: true }),
+  const sidebarDataReady = Promise.allSettled([
     fetchFriendLinks(),
     fetchHotTags()
   ])
+
+  await fetchPosts({ reset: true })
+  void sidebarDataReady.then(async () => {
+    await nextTick()
+    syncSidebarMotionState()
+  })
 
   await nextTick()
   syncSidebarMotionState()

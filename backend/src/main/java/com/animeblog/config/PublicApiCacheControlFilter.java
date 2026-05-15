@@ -14,15 +14,26 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * 为公开文章接口显式下发禁缓存响应头,避免浏览器或 CDN 继续复用旧数据。
+ * 为公开接口下发缓存策略。
+ * 首页列表、标签、分类、友链等允许短缓存,文章详情和评论仍禁缓存以保持访问量与互动数据实时。
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class PublicApiCacheControlFilter extends OncePerRequestFilter {
 
     private static final List<Pattern> NO_STORE_PATH_PATTERNS = List.of(
-            Pattern.compile("^/api/posts(?:/.*)?$"),
-            Pattern.compile("^/api/public(?:/.*)?$"),
+            Pattern.compile("^/api/posts/\\d+/?$"),
+            Pattern.compile("^/api/posts/\\d+/comments/?$")
+    );
+
+    private static final List<Pattern> SHORT_CACHE_PATH_PATTERNS = List.of(
+            Pattern.compile("^/api/posts/?$"),
+            Pattern.compile("^/api/posts/tags/?$"),
+            Pattern.compile("^/api/posts/categories/?$"),
+            Pattern.compile("^/api/posts/search-index/?$"),
+            Pattern.compile("^/api/public/stats/?$"),
+            Pattern.compile("^/api/public/friend-links/?$"),
+            Pattern.compile("^/api/public/music/list/?$"),
             Pattern.compile("^/api/friend-links/?$"),
             Pattern.compile("^/api/music/?$")
     );
@@ -33,25 +44,31 @@ public class PublicApiCacheControlFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        boolean disableCache = "GET".equalsIgnoreCase(request.getMethod()) && shouldDisableCache(request);
+        boolean cacheableGet = "GET".equalsIgnoreCase(request.getMethod());
+        boolean disableCache = cacheableGet && matchesAny(request, NO_STORE_PATH_PATTERNS);
+        boolean shortCache = cacheableGet && !disableCache && matchesAny(request, SHORT_CACHE_PATH_PATTERNS);
         if (disableCache) {
             applyNoStoreHeaders(response);
+        } else if (shortCache) {
+            applyShortCacheHeaders(response);
         }
 
         filterChain.doFilter(request, response);
 
         if (disableCache) {
             applyNoStoreHeaders(response);
+        } else if (shortCache) {
+            applyShortCacheHeaders(response);
         }
     }
 
-    private boolean shouldDisableCache(HttpServletRequest request) {
+    private boolean matchesAny(HttpServletRequest request, List<Pattern> patterns) {
         String path = normalizePath(request.getRequestURI());
         if (path == null || path.isBlank()) {
             return false;
         }
 
-        for (Pattern pattern : NO_STORE_PATH_PATTERNS) {
+        for (Pattern pattern : patterns) {
             if (pattern.matcher(path).matches()) {
                 return true;
             }
@@ -76,5 +93,11 @@ public class PublicApiCacheControlFilter extends OncePerRequestFilter {
         response.setHeader("Surrogate-Control", "no-store");
         response.setHeader("CDN-Cache-Control", "no-store");
         response.setHeader("Cloudflare-CDN-Cache-Control", "no-store");
+    }
+
+    private void applyShortCacheHeaders(HttpServletResponse response) {
+        response.setHeader("Cache-Control", "public, max-age=60, s-maxage=300, stale-while-revalidate=600");
+        response.setHeader("CDN-Cache-Control", "public, max-age=300, stale-while-revalidate=600");
+        response.setHeader("Cloudflare-CDN-Cache-Control", "public, max-age=300, stale-while-revalidate=600");
     }
 }

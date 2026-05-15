@@ -166,6 +166,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 import TopHeader from '@/components/TopHeader.vue'
 import { publicApi } from '@/api'
 import { useUiStore } from '@/stores'

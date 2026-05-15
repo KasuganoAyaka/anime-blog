@@ -98,6 +98,7 @@ import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 import { publicApi } from '@/api'
 import TurnstileWidget from '@/components/TurnstileWidget.vue'
 import {

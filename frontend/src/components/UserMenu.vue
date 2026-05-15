@@ -94,7 +94,6 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore, useThemeStore, useLangStore } from '@/stores'
 
 const router = useRouter()
@@ -115,8 +114,13 @@ const handleAuth = async () => {
   menuVisible.value = false
   if (userStore.isLoggedIn) {
     try {
+      const [{ ElMessage, ElMessageBox }] = await Promise.all([
+        import('element-plus'),
+        import('element-plus/theme-chalk/el-message.css'),
+        import('element-plus/theme-chalk/el-message-box.css')
+      ])
       await ElMessageBox.confirm(t('userMenu.confirmLogout'), t('userMenu.logoutTitle'), {
-        confirmButtonText: t('common.submit'),
+        confirmButtonText: t('common.confirm'),
         cancelButtonText: t('common.cancel'),
         type: 'warning'
       })

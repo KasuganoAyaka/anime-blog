@@ -85,16 +85,17 @@
       </div>
     </div>
   </header>
-  <SearchOverlay v-model="searchVisible" />
+  <SearchOverlay v-if="searchVisible" v-model="searchVisible" />
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useThemeStore } from '@/stores'
-import SearchOverlay from './SearchOverlay.vue'
 import UserMenu from './UserMenu.vue'
+
+const SearchOverlay = defineAsyncComponent(() => import('./SearchOverlay.vue'))
 
 const route = useRoute()
 const router = useRouter()

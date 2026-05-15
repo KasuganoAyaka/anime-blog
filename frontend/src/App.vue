@@ -1,29 +1,29 @@
 <template>
   <div class="app-container" :class="{ dark: themeStore.isDark }">
-    <el-config-provider :locale="elementLocale">
-      <router-view v-slot="{ Component }">
-        <div class="page-wrapper">
-          <transition name="page-slide" mode="out-in">
-            <component :is="Component" :key="routeViewKey" />
-          </transition>
-        </div>
-      </router-view>
-      <ChatWidget v-if="sessionReady && userStore.isLoggedIn" />
-      <MusicPlayer v-model:visible="uiStore.musicPlayerVisible" />
-    </el-config-provider>
+    <router-view v-slot="{ Component }">
+      <div class="page-wrapper">
+        <transition name="page-slide" mode="out-in">
+          <component :is="Component" :key="routeViewKey" />
+        </transition>
+      </div>
+    </router-view>
+    <ChatWidget v-if="sessionReady && userStore.isLoggedIn" />
+    <MusicPlayer
+      v-if="uiStore.musicPlayerVisible"
+      v-model:visible="uiStore.musicPlayerVisible"
+    />
   </div>
 </template>
 
 <script setup>
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import MusicPlayer from './components/MusicPlayer.vue'
 import { ensureValidAccessToken } from './api'
-import { elementLocales } from './i18n'
 import { useThemeStore, useUserStore, useLangStore, useUiStore } from './stores'
 import { syncCurrentProfile } from './utils/profile'
 
 const ChatWidget = defineAsyncComponent(() => import('./components/ChatWidget.vue'))
+const MusicPlayer = defineAsyncComponent(() => import('./components/MusicPlayer.vue'))
 
 const sessionReady = ref(false)
 const route = useRoute()
@@ -31,7 +31,6 @@ const themeStore = useThemeStore()
 const userStore = useUserStore()
 const langStore = useLangStore()
 const uiStore = useUiStore()
-const elementLocale = computed(() => elementLocales[langStore.lang] || elementLocales['zh-CN'])
 const routeViewKey = computed(() => {
   const params = route.params && typeof route.params === 'object' ? route.params : {}
   const serializedParams = Object.keys(params)

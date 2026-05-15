@@ -49,6 +49,47 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 800,
+    modulePreload: {
+      resolveDependencies(filename, deps, context) {
+        if (context.hostType !== 'html') {
+          return deps
+        }
+
+        const deferredEntryDeps = [
+          'Admin',
+          'AdminPostEditor',
+          'About',
+          'Categories',
+          'ChatWidget',
+          'ForgotPassword',
+          'Home',
+          'Login',
+          'Markdown',
+          'Modules',
+          'MusicPlayer',
+          'PostDetail',
+          'Register',
+          'SearchOverlay',
+          'Tags',
+          'turnstile',
+          'passwordRules',
+          'postEditor',
+          'useLoadMoreTrigger',
+          'vendor-codemirror',
+          'vendor-content',
+          'vendor-element',
+          'vendor-fuse',
+          'vendor-lezer',
+          'vendor-lucide',
+          'vendor-markdown',
+          'vendor-medium-zoom',
+          'vendor-vavt',
+          'vendor-vueuse'
+        ]
+
+        return deps.filter((dep) => !deferredEntryDeps.some((pattern) => dep.includes(pattern)))
+      }
+    },
     rollupOptions: {
       output: {
         manualChunks(id) {

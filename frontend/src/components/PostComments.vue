@@ -738,6 +738,8 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+import 'element-plus/theme-chalk/el-message-box.css'
 import { useI18n } from 'vue-i18n'
 import { adminApi, publicApi } from '@/api'
 import TurnstileWidget from '@/components/TurnstileWidget.vue'

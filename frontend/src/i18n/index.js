@@ -1,7 +1,4 @@
 import { createI18n } from 'vue-i18n'
-import en from 'element-plus/es/locale/lang/en'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import zhTw from 'element-plus/es/locale/lang/zh-tw'
 import { defaultLocale, fallbackLocale, messages, supportedLocales } from './messages'
 
 export { defaultLocale, fallbackLocale, supportedLocales } from './messages'
@@ -20,12 +17,6 @@ export const i18n = createI18n({
   fallbackLocale,
   messages
 })
-
-export const elementLocales = {
-  'zh-CN': zhCn,
-  'zh-TW': zhTw,
-  en
-}
 
 export const setI18nLanguage = (locale) => {
   const targetLocale = supportedLocales.includes(locale) ? locale : defaultLocale

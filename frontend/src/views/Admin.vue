@@ -1320,6 +1320,8 @@
 import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+import 'element-plus/theme-chalk/el-message-box.css'
 import { useUserStore, useThemeStore } from '@/stores'
 import AdminListPagination from '@/components/admin/AdminListPagination.vue'
 import MarkdownEditor from '@/components/MarkdownEditor.vue'

@@ -33,7 +33,10 @@ const createNoCacheRequestConfig = (config = {}) => {
   }
 }
 
-const publicGet = (url, config = {}) => api.get(url, createNoCacheRequestConfig(config))
+const publicGet = (url, config = {}) => {
+  const { noCache = false, ...requestConfig } = config
+  return api.get(url, noCache ? createNoCacheRequestConfig(requestConfig) : requestConfig)
+}
 
 const createApiError = (message, payload = {}, status = 200) => {
   const error = new Error(message || 'Request failed')
@@ -230,8 +233,8 @@ export const contentApi = {
   getPostTags: () => publicGet('/posts/tags'),
   getPostCategories: () => publicGet('/posts/categories'),
   getPostSearchIndex: () => publicGet('/posts/search-index'),
-  getPost: (id) => publicGet(`/posts/${id}`),
-  getPostComments: (id) => publicGet(`/posts/${id}/comments`),
+  getPost: (id) => publicGet(`/posts/${id}`, { noCache: true }),
+  getPostComments: (id) => publicGet(`/posts/${id}/comments`, { noCache: true }),
   createPostComment: (id, data) => api.post(`/posts/${id}/comments`, data),
   createCommentReport: (postId, commentId, data) => api.post(`/posts/${postId}/comments/${commentId}/reports`, data),
   uploadCommentImages: (formData) =>

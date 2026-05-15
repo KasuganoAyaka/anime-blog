@@ -48,6 +48,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { publicApi } from '@/api'
 import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
 
 const router = useRouter()
 const { t } = useI18n()
