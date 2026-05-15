@@ -312,3 +312,21 @@ CREATE TABLE IF NOT EXISTS `ip_region_cache` (
     KEY `idx_ip_region_cache_expires_at` (`expires_at`),
     KEY `idx_ip_region_cache_update_time` (`update_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `refresh_token` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `token` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jti` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `device_info` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ip_address` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `expire_time` datetime NOT NULL,
+  `revoked` tinyint NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_refresh_token_jti` (`jti`),
+  KEY `idx_refresh_token_user_revoked_expire` (`user_id`,`revoked`,`expire_time`),
+  KEY `idx_refresh_token_expire_time` (`expire_time`),
+  CONSTRAINT `fk_refresh_token_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
